@@ -1,0 +1,3 @@
+# 小红书视频 URL（每行一个）
+https://www.xiaohongshu.com/explore/xxxxxxxxxx
+https://www.xiaohongshu.com/explore/yyyyyyyyyy

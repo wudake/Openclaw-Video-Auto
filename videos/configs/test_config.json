@@ -1,0 +1,19 @@
+{
+  "preset_key": "custom",
+  "preset_name": "用户定制",
+  "crop_top": 2,
+  "crop_bottom": 2,
+  "speed": 1.2,
+  "hflip": true,
+  "zoom": 1.05,
+  "brightness": 0.05,
+  "contrast": 0.1,
+  "saturation": 0.05,
+  "add_logo": true,
+  "logo_position": "bottom_right",
+  "logo_size": 0.12,
+  "logo_opacity": 0.9,
+  "replace_audio": true,
+  "bgm_volume": 0.8,
+  "add_subtitle": false
+}

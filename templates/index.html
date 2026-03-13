@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XHS2IG - 小红书视频处理工具</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header { text-align: center; color: white; margin-bottom: 30px; }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        .card-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .input-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; color: #555; font-weight: 500; }
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        input:focus, select:focus { outline: none; border-color: #667eea; }
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4); }
+        .btn-secondary { background: #f0f0f0; color: #333; }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top-color: currentColor;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .status {
+            padding: 16px;
+            border-radius: 10px;
+            margin-top: 16px;
+            display: none;
+        }
+        .status.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .status.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .status.show { display: block; }
+        
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .option-item:hover { background: #e9ecef; }
+        .option-item input[type="checkbox"] { width: 20px; height: 20px; }
+        
+        .range-group { margin-bottom: 16px; }
+        .range-group label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .range-value {
+            background: #667eea;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        input[type="range"] { width: 100%; margin-top: 8px; }
+        
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .upload-area:hover { border-color: #667eea; background: #f8f9fa; }
+        
+        .file-list { margin-top: 10px; }
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .select-box {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            background: white;
+        }
+        
+        .preview-video {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 10px;
+            margin: 16px 0;
+        }
+        
+        .action-buttons { display: flex; gap: 12px; margin-top: 20px; }
+        .hidden { display: none !important; }
+        .fade-in { animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .section-title {
+            font-weight: 600;
+            color: #667eea;
+            margin: 20px 0 10px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎬 XHS2IG</h1>
+            <p>小红书视频下载 + 智能剪辑</p>
+        </div>
+
+        <!-- 步骤 1: 下载 -->
+        <div class="card" id="step1">
+            <div class="card-title">
+                <span class="step-number">1</span>
+                下载小红书视频
+            </div>
+            <div class="input-group">
+                <label>小红书视频链接</label>
+                <input type="text" id="xhs-url" placeholder="https://www.xiaohongshu.com/explore/...">
+            </div>
+            <button class="btn btn-primary" id="btn-download" onclick="downloadVideo()">
+                <span>开始下载</span>
+            </button>
+            <div class="status" id="download-status"></div>
+        </div>
+
+        <!-- 步骤 2: 剪辑配置 -->
+        <div class="card hidden" id="step2">
+            <div class="card-title">
+                <span class="step-number">2</span>
+                剪辑配置
+            </div>
+            
+            <!-- Logo 上传和选择 -->
+            <div class="section-title">📁 Logo 设置</div>
+            <div class="input-group">
+                <label>上传新 Logo</label>
+                <div class="upload-area" onclick="document.getElementById('logo-file').click()">
+                    <p>点击上传 Logo (PNG/JPG)</p>
+                    <input type="file" id="logo-file" accept=".png,.jpg,.jpeg" style="display:none" onchange="uploadLogo(this)">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>选择 Logo</label>
+                <select id="logo-select" class="select-box">
+                    <option value="">-- 请选择 Logo --</option>
+                </select>
+                <div class="file-list" id="logo-list"></div>
+            </div>
+            
+            <!-- BGM 上传和选择 -->
+            <div class="section-title">🎵 BGM 设置</div>
+            <div class="input-group">
+                <label>上传新 BGM</label>
+                <div class="upload-area" onclick="document.getElementById('bgm-file').click()">
+                    <p>点击上传 BGM (MP3/M4A)</p>
+                    <input type="file" id="bgm-file" accept=".mp3,.m4a,.wav" style="display:none" onchange="uploadBgm(this)">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>选择 BGM</label>
+                <select id="bgm-select" class="select-box">
+                    <option value="">-- 请选择 BGM --</option>
+                </select>
+                <div class="file-list" id="bgm-list"></div>
+            </div>
+
+            <!-- 音频设置 -->
+            <div class="section-title">🔊 音频设置</div>
+            <div class="options-grid">
+                <label class="option-item">
+                    <input type="checkbox" id="opt-replace-audio">
+                    <span>使用 BGM 替换原声</span>
+                </label>
+            </div>
+            
+            <div class="range-group">
+                <label>
+                    原声音量
+                    <span class="range-value" id="orig-vol-value">100%</span>
+                </label>
+                <input type="range" id="original-volume" min="0" max="2" step="0.1" value="1"
+                       oninput="document.getElementById('orig-vol-value').textContent=Math.round(this.value*100)+'%'">
+            </div>
+            
+            <div class="range-group">
+                <label>
+                    BGM 音量
+                    <span class="range-value" id="bgm-vol-value">80%</span>
+                </label>
+                <input type="range" id="bgm-volume" min="0" max="2" step="0.1" value="0.8"
+                       oninput="document.getElementById('bgm-vol-value').textContent=Math.round(this.value*100)+'%'">
+            </div>
+
+            <!-- 视频效果 -->
+            <div class="section-title">🎨 视频效果</div>
+            <div class="options-grid">
+                <label class="option-item">
+                    <input type="checkbox" id="opt-hflip" checked>
+                    <span>水平镜像</span>
+                </label>
+                <label class="option-item">
+                    <input type="checkbox" id="opt-crop" checked>
+                    <span>裁剪首尾</span>
+                </label>
+                <label class="option-item">
+                    <input type="checkbox" id="opt-color" checked>
+                    <span>调色</span>
+                </label>
+                <label class="option-item">
+                    <input type="checkbox" id="opt-zoom" checked>
+                    <span>缩放位移</span>
+                </label>
+            </div>
+
+            <div class="range-group">
+                <label>
+                    播放速度
+                    <span class="range-value" id="speed-value">1.05x</span>
+                </label>
+                <input type="range" id="speed" min="0.8" max="2.0" step="0.05" value="1.05" 
+                       oninput="document.getElementById('speed-value').textContent=this.value+'x'">
+            </div>
+
+            <div class="range-group">
+                <label>
+                    Logo 大小
+                    <span class="range-value" id="logo-size-value">10%</span>
+                </label>
+                <input type="range" id="logo-size" min="0.05" max="0.3" step="0.01" value="0.10"
+                       oninput="document.getElementById('logo-size-value').textContent=Math.round(this.value*100)+'%'">
+            </div>
+
+            <div class="input-group">
+                <label>Logo 位置</label>
+                <select id="logo-position" class="select-box">
+                    <option value="bottom_right">右下角</option>
+                    <option value="bottom_left">左下角</option>
+                    <option value="top_right">右上角</option>
+                    <option value="top_left">左上角</option>
+                    <option value="bottom_center">底部居中</option>
+                </select>
+            </div>
+
+            <button class="btn btn-primary" id="btn-edit" onclick="editVideo()">
+                <span>开始剪辑</span>
+            </button>
+            <div class="status" id="edit-status"></div>
+        </div>
+
+        <!-- 步骤 3: 完成 -->
+        <div class="card hidden" id="step3">
+            <div class="card-title">
+                <span class="step-number">3</span>
+                剪辑完成
+            </div>
+            <p>🎉 视频剪辑成功！</p>
+            <video class="preview-video" id="preview-player" controls></video>
+            <div class="action-buttons">
+                <a id="download-link" class="btn btn-primary" download>⬇️ 下载视频</a>
+                <button class="btn btn-secondary" onclick="location.reload()">🔄 处理下一个</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentNoteId = null;
+        let logosData = [];
+        let bgmsData = [];
+
+        function showStatus(id, msg, isError) {
+            const el = document.getElementById(id);
+            el.textContent = msg;
+            el.className = 'status show ' + (isError ? 'error' : 'success');
+        }
+
+        function setLoading(btnId, loading) {
+            const btn = document.getElementById(btnId);
+            if (loading) {
+                btn.disabled = true;
+                btn.innerHTML = '<div class="spinner"></div><span>处理中...</span>';
+            } else {
+                btn.disabled = false;
+                btn.innerHTML = '<span>开始' + (btnId === 'btn-download' ? '下载' : '剪辑') + '</span>';
+            }
+        }
+
+        // 加载 Logo 列表
+        async function loadLogos() {
+            try {
+                const res = await fetch('/api/logos/list');
+                const data = await res.json();
+                logosData = data.logos || [];
+                
+                const select = document.getElementById('logo-select');
+                select.innerHTML = '<option value="">-- 请选择 Logo --</option>';
+                
+                logosData.forEach(logo => {
+                    const opt = document.createElement('option');
+                    opt.value = logo.name;
+                    opt.textContent = logo.name + ' (' + logo.size_kb + 'KB)';
+                    select.appendChild(opt);
+                });
+                
+                // 如果有 logo，默认选第一个
+                if (logosData.length > 0) {
+                    select.value = logosData[0].name;
+                }
+            } catch (e) {
+                console.error('加载 Logo 失败:', e);
+            }
+        }
+
+        // 加载 BGM 列表
+        async function loadBgms() {
+            try {
+                const res = await fetch('/api/bgm/list');
+                const data = await res.json();
+                bgmsData = data.bgms || [];
+                
+                const select = document.getElementById('bgm-select');
+                select.innerHTML = '<option value="">-- 请选择 BGM --</option>';
+                
+                bgmsData.forEach(bgm => {
+                    const opt = document.createElement('option');
+                    opt.value = bgm.name;
+                    opt.textContent = bgm.name + ' (' + bgm.size_mb + 'MB)';
+                    select.appendChild(opt);
+                });
+                
+                // 如果有 bgm，默认选第一个
+                if (bgmsData.length > 0) {
+                    select.value = bgmsData[0].name;
+                }
+            } catch (e) {
+                console.error('加载 BGM 失败:', e);
+            }
+        }
+
+        async function downloadVideo() {
+            const url = document.getElementById('xhs-url').value.trim();
+            if (!url) {
+                showStatus('download-status', '请输入链接', true);
+                return;
+            }
+
+            setLoading('btn-download', true);
+            try {
+                const res = await fetch('/api/download', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+                const result = await res.json();
+
+                if (result.success) {
+                    currentNoteId = result.data.note_id;
+                    showStatus('download-status', `✅ 下载成功！${result.data.size_mb}MB`);
+                    
+                    // 加载资源列表
+                    await loadLogos();
+                    await loadBgms();
+                    
+                    document.getElementById('step2').classList.remove('hidden');
+                    document.getElementById('step2').classList.add('fade-in');
+                    document.getElementById('step2').scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    showStatus('download-status', '❌ ' + result.error, true);
+                }
+            } catch (e) {
+                showStatus('download-status', '❌ 网络错误', true);
+            } finally {
+                setLoading('btn-download', false);
+            }
+        }
+
+        async function uploadLogo(input) {
+            if (!input.files.length) return;
+            const formData = new FormData();
+            formData.append('file', input.files[0]);
+
+            try {
+                const res = await fetch('/api/upload/logo', { method: 'POST', body: formData });
+                const result = await res.json();
+                if (result.success) {
+                    alert('✅ ' + result.message);
+                    await loadLogos();
+                } else {
+                    alert('❌ ' + result.error);
+                }
+            } catch (e) {
+                alert('上传失败');
+            }
+        }
+
+        async function uploadBgm(input) {
+            if (!input.files.length) return;
+            const formData = new FormData();
+            formData.append('file', input.files[0]);
+
+            try {
+                const res = await fetch('/api/upload/bgm', { method: 'POST', body: formData });
+                const result = await res.json();
+                if (result.success) {
+                    alert('✅ ' + result.message);
+                    await loadBgms();
+                } else {
+                    alert('❌ ' + result.error);
+                }
+            } catch (e) {
+                alert('上传失败');
+            }
+        }
+
+        async function editVideo() {
+            if (!currentNoteId) {
+                showStatus('edit-status', '请先下载视频', true);
+                return;
+            }
+
+            const logoSelect = document.getElementById('logo-select').value;
+            const bgmSelect = document.getElementById('bgm-select').value;
+            const replaceAudio = document.getElementById('opt-replace-audio').checked;
+            
+            if (!logoSelect && document.getElementById('opt-hflip').checked === false) {
+                // 允许没有 logo
+            }
+
+            setLoading('btn-edit', true);
+
+            const config = {
+                crop_top: document.getElementById('opt-crop').checked ? 0.5 : 0,
+                crop_bottom: document.getElementById('opt-crop').checked ? 0.5 : 0,
+                speed: parseFloat(document.getElementById('speed').value),
+                hflip: document.getElementById('opt-hflip').checked,
+                zoom: document.getElementById('opt-zoom').checked ? 1.05 : 1.0,
+                brightness: document.getElementById('opt-color').checked ? 0.05 : 0,
+                contrast: document.getElementById('opt-color').checked ? 0.1 : 0,
+                saturation: document.getElementById('opt-color').checked ? 0.05 : 0,
+                add_logo: !!logoSelect,
+                logo_select: logoSelect,
+                logo_position: document.getElementById('logo-position').value,
+                logo_size: parseFloat(document.getElementById('logo-size').value),
+                replace_audio: replaceAudio,
+                bgm_select: bgmSelect,
+                bgm_volume: parseFloat(document.getElementById('bgm-volume').value),
+                original_volume: parseFloat(document.getElementById('original-volume').value)
+            };
+
+            try {
+                const res = await fetch('/api/edit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ note_id: currentNoteId, config })
+                });
+                const result = await res.json();
+
+                if (result.success) {
+                    showStatus('edit-status', '✅ 剪辑成功！');
+                    document.getElementById('step3').classList.remove('hidden');
+                    document.getElementById('step3').classList.add('fade-in');
+                    document.getElementById('preview-player').src = result.data.preview_url;
+                    document.getElementById('download-link').href = result.data.download_url;
+                    
+                    // 保存当前视频名
+                    window.currentVideoName = result.data.output_name;
+                    
+                    document.getElementById('step3').scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    showStatus('edit-status', '❌ ' + result.error, true);
+                }
+            } catch (e) {
+                showStatus('edit-status', '❌ 网络错误', true);
+            } finally {
+                setLoading('btn-edit', false);
+            } catch (e) {
+                showStatus('edit-status', '❌ 网络错误', true);
+            } finally {
+                setLoading('btn-edit', false);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+# Instagram 账号配置
+instagram:
+  username: "your_instagram_username"
+  password: "your_instagram_password"
+  # 2FA 验证码（如果开了双重验证）
+  # verification_code: ""
+
+# 发布配置
+publish:
+  # 默认 Hashtags
+  hashtags:
+    - "cncmachining"
+    - "manufacturing"
+    - "metalworking"
+    - "factorylife"
+    - "engineering"
+  
+  # 默认 Caption 模板
+  caption_template: |
+    🎬 Daily insights from manufacturing world.
+    
+    What do you think? Drop a comment! 👇
+    
+    {hashtags}
+
+# 视频剪辑配置
+editing:
+  # 裁剪视频开头秒数（去水印）
+  trim_start: 2
+  # 裁剪视频结尾秒数
+  trim_end: 1
+  # 输出分辨率 (width x height)
+  # 4:5 = 1080x1350 (IG Feed)
+  # 9:16 = 1080x1920 (IG Reels)
+  output_size:
+    width: 1080
+    height: 1350
+  # 输出视频码率 (Mbps)
+  bitrate: "4M"
+
+# 调度配置
+scheduler:
+  # 每天发布时间 (24小时制)
+  publish_times:
+    - "10:00"
+    - "16:00"
+  # 时区
+  timezone: "Asia/Shanghai"
