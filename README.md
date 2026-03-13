@@ -1,4 +1,4 @@
-# XHS2IG - 小红书 to Instagram 视频处理工具
+# Dake-Video-Auto - 视频处理工具
 
 一个自动化工具，用于从小红书下载视频，进行智能剪辑，输出适合 Instagram/TikTok/YouTube Shorts 的竖版视频。
 
@@ -26,8 +26,8 @@
 
 ```bash
 # 克隆项目
-git clone https://github.com/yourusername/xhs2ig.git
-cd xhs2ig
+git clone https://github.com/wudake/Dake-Video-Auto.git
+cd Dake-Video-Auto
 
 # 创建虚拟环境
 python3 -m venv venv
@@ -52,7 +52,7 @@ python app_simple.py
 ## 目录结构
 
 ```
-xhs2ig/
+Dake-Video-Auto/
 ├── app_simple.py          # Flask 主应用
 ├── core/
 │   ├── downloader_pw.py   # 小红书下载器
