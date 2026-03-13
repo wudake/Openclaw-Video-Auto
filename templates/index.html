@@ -3,74 +3,223 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XHS2IG - 小红书视频处理工具</title>
+    <title>CD团 - 视频处理工具</title>
+    <!-- 徽标 -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='linear-gradient(135deg, #667eea 0%, #764ba2 100%)'/><text x='50' y='65' font-size='45' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>CD</text></svg>">
+    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --bg-dark: #0f172a;
+            --bg-card: rgba(30, 41, 59, 0.8);
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: rgba(148, 163, 184, 0.2);
+            --success: #10b981;
+            --error: #ef4444;
+        }
+        
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-dark);
             min-height: 100vh;
-            padding: 20px;
+            color: var(--text);
+            line-height: 1.6;
         }
-        .container { max-width: 800px; margin: 0 auto; }
-        .header { text-align: center; color: white; margin-bottom: 30px; }
-        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
-        .card {
-            background: white;
-            border-radius: 16px;
-            padding: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        
+        /* 动态背景 */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(6, 182, 212, 0.05) 0%, transparent 70%);
         }
-        .card-title {
-            font-size: 1.3em;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: #333;
-            display: flex;
+        
+        .container { 
+            max-width: 900px; 
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        /* 头部 */
+        .header { 
+            text-align: center; 
+            margin-bottom: 40px;
+            animation: fadeInDown 0.6s ease;
+        }
+        
+        .logo {
+            display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
+            margin-bottom: 15px;
         }
-        .step-number {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 50%;
+        
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
+            font-size: 28px;
+            font-weight: 800;
+            color: white;
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
         }
-        .input-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; color: #555; font-weight: 500; }
-        input[type="text"], input[type="number"], select {
+        
+        .header h1 { 
+            font-size: 2.8em; 
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+        }
+        
+        .header p { 
+            color: var(--text-muted);
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+        
+        /* 卡片 */
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 0.6s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6);
+        }
+        
+        .card-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .step-number {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9em;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+        
+        /* 输入框 */
+        .input-group { 
+            margin-bottom: 24px; 
+        }
+        
+        label { 
+            display: block; 
+            margin-bottom: 10px; 
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.95em;
+        }
+        
+        input[type="text"], 
+        input[type="password"],
+        select,
+        textarea {
             width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
+            padding: 14px 18px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 12px;
             font-size: 16px;
+            color: var(--text);
+            transition: all 0.3s ease;
         }
-        input:focus, select:focus { outline: none; border-color: #667eea; }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+        
+        input::placeholder {
+            color: var(--text-muted);
+        }
+        
+        /* 按钮 */
         .btn {
             padding: 14px 28px;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
+        
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
         }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4); }
-        .btn-secondary { background: #f0f0f0; color: #333; }
-        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        
+        .btn-primary:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.5);
+        }
+        
+        .btn-secondary {
+            background: rgba(148, 163, 184, 0.1);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(148, 163, 184, 0.2);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        /* 加载动画 */
         .spinner {
             width: 20px;
             height: 20px;
@@ -79,106 +228,217 @@
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .status {
-            padding: 16px;
-            border-radius: 10px;
-            margin-top: 16px;
-            display: none;
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
-        .status.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .status.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        
+        /* 状态提示 */
+        .status {
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            display: none;
+            font-weight: 500;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .status.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .status.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
         .status.show { display: block; }
         
+        /* 选项网格 */
         .options-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
+        
         .option-item {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 12px;
-            background: #f8f9fa;
-            border-radius: 10px;
+            gap: 12px;
+            padding: 14px 16px;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 12px;
             cursor: pointer;
+            transition: all 0.3s ease;
         }
-        .option-item:hover { background: #e9ecef; }
-        .option-item input[type="checkbox"] { width: 20px; height: 20px; }
         
-        .range-group { margin-bottom: 16px; }
+        .option-item:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary);
+        }
+        
+        .option-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary);
+        }
+        
+        /* 滑块 */
+        .range-group {
+            margin-bottom: 24px;
+        }
+        
         .range-group label {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
+        
         .range-value {
-            background: #667eea;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
-            padding: 4px 10px;
+            padding: 6px 14px;
             border-radius: 20px;
             font-size: 14px;
+            font-weight: 600;
         }
-        input[type="range"] { width: 100%; margin-top: 8px; }
         
+        input[type="range"] {
+            width: 100%;
+            margin-top: 12px;
+            height: 6px;
+            background: rgba(148, 163, 184, 0.2);
+            border-radius: 3px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+        
+        /* 上传区域 */
         .upload-area {
-            border: 2px dashed #ccc;
-            border-radius: 10px;
-            padding: 30px;
+            border: 2px dashed var(--border);
+            border-radius: 16px;
+            padding: 40px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            background: rgba(15, 23, 42, 0.3);
         }
-        .upload-area:hover { border-color: #667eea; background: #f8f9fa; }
         
-        .file-list { margin-top: 10px; }
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+        
+        /* 视频预览 */
+        .preview-video {
+            width: 100%;
+            max-width: 350px;
+            border-radius: 16px;
+            margin: 20px 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        /* 按钮组 */
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+        
+        .hidden { display: none !important; }
+        
+        /* 分区标题 */
+        .section-title {
+            font-weight: 700;
+            color: var(--text);
+            margin: 28px 0 16px 0;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+            font-size: 1.1em;
+        }
+        
+        /* 选择框 */
+        .select-box {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 16px;
+            color: var(--text);
+        }
+        
+        /* 动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeInUp 0.6s ease;
+        }
+        
+        /* 文件列表 */
+        .file-list { margin-top: 16px; }
+        
         .file-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            margin-bottom: 8px;
-        }
-        
-        .select-box {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
+            padding: 12px 16px;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border);
             border-radius: 10px;
-            font-size: 16px;
-            background: white;
+            margin-bottom: 10px;
+            font-size: 0.95em;
         }
         
-        .preview-video {
-            width: 100%;
-            max-width: 400px;
-            border-radius: 10px;
-            margin: 16px 0;
-        }
-        
-        .action-buttons { display: flex; gap: 12px; margin-top: 20px; }
-        .hidden { display: none !important; }
-        .fade-in { animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .section-title {
-            font-weight: 600;
-            color: #667eea;
-            margin: 20px 0 10px 0;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #e0e0e0;
+        /* 响应式 */
+        @media (max-width: 600px) {
+            .container { padding: 20px 16px; }
+            .header h1 { font-size: 2em; }
+            .card { padding: 24px; }
+            .options-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
+    <div class="bg-animation"></div>
+    
     <div class="container">
+        <!-- 头部 -->
         <div class="header">
-            <h1>🎬 XHS2IG</h1>
-            <p>小红书视频下载 + 智能剪辑</p>
+            <div class="logo">
+                <div class="logo-icon">CD</div>
+            </div>
+            <h1>CD团 视频工具</h1>
+            <p>小红书视频下载 · 智能剪辑 · 一键导出</p>
         </div>
 
         <!-- 步骤 1: 下载 -->
@@ -191,6 +451,7 @@
                 <label>小红书视频链接</label>
                 <input type="text" id="xhs-url" placeholder="https://www.xiaohongshu.com/explore/...">
             </div>
+            
             <button class="btn btn-primary" id="btn-download" onclick="downloadVideo()">
                 <span>开始下载</span>
             </button>
@@ -204,42 +465,41 @@
                 剪辑配置
             </div>
             
-            <!-- Logo 上传和选择 -->
+            <!-- Logo -->
             <div class="section-title">📁 Logo 设置</div>
             <div class="input-group">
-                <label>上传新 Logo</label>
                 <div class="upload-area" onclick="document.getElementById('logo-file').click()">
-                    <p>点击上传 Logo (PNG/JPG)</p>
-                    <input type="file" id="logo-file" accept=".png,.jpg,.jpeg" style="display:none" onchange="uploadLogo(this)">
+                    <p>📤 点击上传 Logo (PNG)</p>
+                    <input type="file" id="logo-file" accept=".png" style="display:none" onchange="uploadLogo(this)">
                 </div>
             </div>
+            
             <div class="input-group">
                 <label>选择 Logo</label>
                 <select id="logo-select" class="select-box">
-                    <option value="">-- 请选择 Logo --</option>
+                    <option value="">-- 请选择 --</option>
                 </select>
-                <div class="file-list" id="logo-list"></div>
             </div>
             
-            <!-- BGM 上传和选择 -->
+            <!-- BGM -->
             <div class="section-title">🎵 BGM 设置</div>
             <div class="input-group">
-                <label>上传新 BGM</label>
                 <div class="upload-area" onclick="document.getElementById('bgm-file').click()">
-                    <p>点击上传 BGM (MP3/M4A)</p>
-                    <input type="file" id="bgm-file" accept=".mp3,.m4a,.wav" style="display:none" onchange="uploadBgm(this)">
+                    <p>🎼 点击上传 BGM (MP3)</p>
+                    <input type="file" id="bgm-file" accept=".mp3,.m4a" style="display:none" onchange="uploadBgm(this)">
                 </div>
             </div>
+            
             <div class="input-group">
                 <label>选择 BGM</label>
                 <select id="bgm-select" class="select-box">
-                    <option value="">-- 请选择 BGM --</option>
+                    <option value="">-- 请选择 --</option>
                 </select>
-                <div class="file-list" id="bgm-list"></div>
             </div>
 
             <!-- 音频设置 -->
             <div class="section-title">🔊 音频设置</div>
+            
             <div class="options-grid">
                 <label class="option-item">
                     <input type="checkbox" id="opt-replace-audio">
@@ -267,6 +527,7 @@
 
             <!-- 视频效果 -->
             <div class="section-title">🎨 视频效果</div>
+            
             <div class="options-grid">
                 <label class="option-item">
                     <input type="checkbox" id="opt-hflip" checked>
@@ -274,15 +535,15 @@
                 </label>
                 <label class="option-item">
                     <input type="checkbox" id="opt-crop" checked>
-                    <span>裁剪首尾</span>
+                    <span>裁剪首尾 0.5s</span>
                 </label>
                 <label class="option-item">
                     <input type="checkbox" id="opt-color" checked>
-                    <span>调色</span>
+                    <span>调色优化</span>
                 </label>
                 <label class="option-item">
                     <input type="checkbox" id="opt-zoom" checked>
-                    <span>缩放位移</span>
+                    <span>智能缩放</span>
                 </label>
             </div>
 
@@ -316,7 +577,7 @@
             </div>
 
             <button class="btn btn-primary" id="btn-edit" onclick="editVideo()">
-                <span>开始剪辑</span>
+                <span>✨ 开始剪辑</span>
             </button>
             <div class="status" id="edit-status"></div>
         </div>
@@ -327,7 +588,7 @@
                 <span class="step-number">3</span>
                 剪辑完成
             </div>
-            <p>🎉 视频剪辑成功！</p>
+            <p style="color: var(--success); font-size: 1.2em;">🎉 视频剪辑成功！</p>
             <video class="preview-video" id="preview-player" controls></video>
             <div class="action-buttons">
                 <a id="download-link" class="btn btn-primary" download>⬇️ 下载视频</a>
@@ -354,11 +615,10 @@
                 btn.innerHTML = '<div class="spinner"></div><span>处理中...</span>';
             } else {
                 btn.disabled = false;
-                btn.innerHTML = '<span>开始' + (btnId === 'btn-download' ? '下载' : '剪辑') + '</span>';
+                btn.innerHTML = btnId === 'btn-download' ? '<span>开始下载</span>' : '<span>✨ 开始剪辑</span>';
             }
         }
 
-        // 加载 Logo 列表
         async function loadLogos() {
             try {
                 const res = await fetch('/api/logos/list');
@@ -366,7 +626,7 @@
                 logosData = data.logos || [];
                 
                 const select = document.getElementById('logo-select');
-                select.innerHTML = '<option value="">-- 请选择 Logo --</option>';
+                select.innerHTML = '<option value="">-- 请选择 --</option>';
                 
                 logosData.forEach(logo => {
                     const opt = document.createElement('option');
@@ -375,16 +635,12 @@
                     select.appendChild(opt);
                 });
                 
-                // 如果有 logo，默认选第一个
-                if (logosData.length > 0) {
-                    select.value = logosData[0].name;
-                }
+                if (logosData.length > 0) select.value = logosData[0].name;
             } catch (e) {
                 console.error('加载 Logo 失败:', e);
             }
         }
 
-        // 加载 BGM 列表
         async function loadBgms() {
             try {
                 const res = await fetch('/api/bgm/list');
@@ -392,7 +648,7 @@
                 bgmsData = data.bgms || [];
                 
                 const select = document.getElementById('bgm-select');
-                select.innerHTML = '<option value="">-- 请选择 BGM --</option>';
+                select.innerHTML = '<option value="">-- 请选择 --</option>';
                 
                 bgmsData.forEach(bgm => {
                     const opt = document.createElement('option');
@@ -401,10 +657,7 @@
                     select.appendChild(opt);
                 });
                 
-                // 如果有 bgm，默认选第一个
-                if (bgmsData.length > 0) {
-                    select.value = bgmsData[0].name;
-                }
+                if (bgmsData.length > 0) select.value = bgmsData[0].name;
             } catch (e) {
                 console.error('加载 BGM 失败:', e);
             }
@@ -430,7 +683,6 @@
                     currentNoteId = result.data.note_id;
                     showStatus('download-status', `✅ 下载成功！${result.data.size_mb}MB`);
                     
-                    // 加载资源列表
                     await loadLogos();
                     await loadBgms();
                     
@@ -494,10 +746,6 @@
             const logoSelect = document.getElementById('logo-select').value;
             const bgmSelect = document.getElementById('bgm-select').value;
             const replaceAudio = document.getElementById('opt-replace-audio').checked;
-            
-            if (!logoSelect && document.getElementById('opt-hflip').checked === false) {
-                // 允许没有 logo
-            }
 
             setLoading('btn-edit', true);
 
@@ -534,18 +782,11 @@
                     document.getElementById('step3').classList.add('fade-in');
                     document.getElementById('preview-player').src = result.data.preview_url;
                     document.getElementById('download-link').href = result.data.download_url;
-                    
-                    // 保存当前视频名
                     window.currentVideoName = result.data.output_name;
-                    
                     document.getElementById('step3').scrollIntoView({ behavior: 'smooth' });
                 } else {
                     showStatus('edit-status', '❌ ' + result.error, true);
                 }
-            } catch (e) {
-                showStatus('edit-status', '❌ 网络错误', true);
-            } finally {
-                setLoading('btn-edit', false);
             } catch (e) {
                 showStatus('edit-status', '❌ 网络错误', true);
             } finally {
