@@ -1,6 +1,13 @@
+# 核心依赖
 instagrapi>=2.0.0
-yt-dlp>=2024.0.0
 requests>=2.31.0
 pyyaml>=6.0.1
 apscheduler>=3.10.0
 pillow>=10.0.0
+
+# Web 框架
+flask>=2.0.0
+werkzeug>=2.0.0
+
+# 浏览器自动化
+playwright>=1.40.0
