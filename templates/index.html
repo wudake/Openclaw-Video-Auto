@@ -773,6 +773,89 @@
                 </select>
             </div>
 
+            <!-- 字幕设置 -->
+            <div class="section-title">📝 字幕设置</div>
+            
+            <div class="options-grid">
+                <label class="option-item">
+                    <input type="checkbox" id="opt-subtitles">
+                    <span>添加字幕</span>
+                </label>
+            </div>
+            
+            <!-- 字幕配置面板 -->
+            <div id="subtitle-config-panel" style="display: none; padding: 20px; background: rgba(15, 23, 42, 0.5); border-radius: 12px; margin-bottom: 20px;">
+                
+                <div class="input-group">
+                    <label>字幕内容</label>
+                    <textarea id="subtitle-text" rows="2" placeholder="输入字幕内容，例如：Hello World" style="width: 100%; padding: 12px; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border); border-radius: 10px; color: var(--text); resize: vertical;"></textarea>
+                </div>
+                
+                <div class="input-group">
+                    <label>
+                        显示时间
+                        <span style="color: var(--text-muted); font-size: 12px;">(秒)</span>
+                    </label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <input type="number" id="subtitle-start" class="select-box" value="0" min="0" max="60" step="0.5" placeholder="开始">
+                        <input type="number" id="subtitle-end" class="select-box" value="" min="0" max="60" step="0.5" placeholder="结束(留空到结尾)">
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label>颜色方案</label>
+                    <select id="subtitle-style" class="select-box">
+                        <option value="yellow_black">黄字黑边</option>
+                        <option value="white_black">白字黑边</option>
+                        <option value="black_white">黑字白边</option>
+                        <option value="cyan_black">青字黑边</option>
+                        <option value="pink_black">粉字黑边</option>
+                        <option value="white_blue">白字蓝边</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label>字体大小</label>
+                    <input type="number" id="subtitle-font-size" class="select-box" value="24" min="10" max="72" style="width: 100%;">
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div class="input-group">
+                        <label>垂直位置</label>
+                        <select id="subtitle-position" class="select-box">
+                            <option value="bottom">底部</option>
+                            <option value="middle">中间</option>
+                            <option value="top">顶部</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>水平对齐</label>
+                        <select id="subtitle-align" class="select-box">
+                            <option value="center">居中</option>
+                            <option value="left">左对齐</option>
+                            <option value="right">右对齐</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label>描边宽度</label>
+                    <select id="subtitle-outline" class="select-box">
+                        <option value="1">细 (1px)</option>
+                        <option value="2" selected>中 (2px)</option>
+                        <option value="3">粗 (3px)</option>
+                    </select>
+                </div>
+                
+                <!-- 预览 -->
+                <div style="margin-top: 15px; padding: 15px; background: rgba(0, 0, 0, 0.4); border-radius: 10px; text-align: center;">
+                    <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">效果预览</div>
+                    <div id="subtitle-preview" style="font-size: 24px; color: #FFD700; text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000; font-weight: bold; padding: 10px;">
+                        Hello World
+                    </div>
+                </div>
+            </div>
+
             <button class="btn btn-primary" id="btn-edit" onclick="editVideo()">
                 <span>✨ 开始剪辑</span>
             </button>
@@ -923,20 +1006,33 @@
             }
         }
 
-        // 字幕功能控制
+        // 字幕面板显示控制
         document.getElementById('opt-subtitles').addEventListener('change', function() {
-            const customGroup = document.getElementById('custom-subtitle-group');
-            customGroup.style.display = this.checked ? 'block' : 'none';
+            const panel = document.getElementById('subtitle-config-panel');
+            panel.style.display = this.checked ? 'block' : 'none';
         });
 
-        // 字体大小实时预览
-        document.getElementById('subtitle-custom-size').addEventListener('input', function() {
-            const size = this.value || 16;
-            const preview = document.getElementById('font-preview');
-            const display = document.getElementById('font-size-display');
+        // 字幕效果实时预览
+        function updateSubtitlePreview() {
+            const style = document.getElementById('subtitle-style').value;
+            const size = document.getElementById('subtitle-font-size').value || 24;
+            const preview = document.getElementById('subtitle-preview');
+            
+            const colorMap = {
+                'yellow_black': '#FFD700',
+                'white_black': '#FFFFFF',
+                'black_white': '#000000',
+                'cyan_black': '#00FFFF',
+                'pink_black': '#FF69B4',
+                'white_blue': '#FFFFFF'
+            };
+            
+            preview.style.color = colorMap[style] || '#FFD700';
             preview.style.fontSize = size + 'px';
-            display.textContent = size + 'px';
-        });
+        }
+        
+        document.getElementById('subtitle-style').addEventListener('change', updateSubtitlePreview);
+        document.getElementById('subtitle-font-size').addEventListener('input', updateSubtitlePreview);
 
         async function editVideo() {
             if (!currentNoteId) {
@@ -952,6 +1048,32 @@
             const isCropEnabled = document.getElementById('opt-crop').checked;
             const cropHeadTime = isCropEnabled ? parseFloat(document.getElementById('crop-head-time').value) || 0 : 0;
             const cropTailTime = isCropEnabled ? parseFloat(document.getElementById('crop-tail-time').value) || 0 : 0;
+
+            // 获取字幕配置
+            const addSubtitles = document.getElementById('opt-subtitles').checked;
+            let subtitleConfig = {};
+            
+            if (addSubtitles) {
+                const subtitleText = document.getElementById('subtitle-text').value.trim();
+                if (!subtitleText) {
+                    showStatus('edit-status', '请输入字幕内容', true);
+                    return;
+                }
+                
+                const subtitleEnd = document.getElementById('subtitle-end').value;
+                
+                subtitleConfig = {
+                    add_subtitles: true,
+                    subtitle_text: subtitleText,
+                    subtitle_start: parseFloat(document.getElementById('subtitle-start').value) || 0,
+                    subtitle_end: subtitleEnd ? parseFloat(subtitleEnd) : null,
+                    subtitle_style: document.getElementById('subtitle-style').value,
+                    subtitle_font_size: parseInt(document.getElementById('subtitle-font-size').value) || 24,
+                    subtitle_position: document.getElementById('subtitle-position').value,
+                    subtitle_align: document.getElementById('subtitle-align').value,
+                    subtitle_outline_width: parseInt(document.getElementById('subtitle-outline').value) || 2
+                };
+            }
 
             setLoading('btn-edit', true);
 
@@ -971,7 +1093,8 @@
                 replace_audio: replaceAudio,
                 bgm_select: bgmSelect,
                 bgm_volume: parseFloat(document.getElementById('bgm-volume').value),
-                original_volume: parseFloat(document.getElementById('original-volume').value)
+                original_volume: parseFloat(document.getElementById('original-volume').value),
+                ...subtitleConfig
             };
 
             try {

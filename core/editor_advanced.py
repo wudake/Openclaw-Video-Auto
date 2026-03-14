@@ -240,27 +240,36 @@ class AdvancedVideoEditor:
                 font_size = 36
             print(f"   字体大小: 自适应 {font_size}px")
         
-        # 位置
+        # 位置和对齐
         position = style_config.get("position", "bottom")
-        margin_v = {"top": 50, "middle": 540, "bottom": 100}.get(position, 100)
+        align = style_config.get("align", "center")
         
-        # 最大行宽
-        max_width = style_config.get("max_width", 0.9)
+        # ASS Alignment: 1=左下, 2=中下, 3=右下, 4=左中, 5=中中, 6=右中, 7=左上, 8=中上, 9=右上
+        alignment_map = {
+            ("top", "left"): 7, ("top", "center"): 8, ("top", "right"): 9,
+            ("middle", "left"): 4, ("middle", "center"): 5, ("middle", "right"): 6,
+            ("bottom", "left"): 1, ("bottom", "center"): 2, ("bottom", "right"): 3
+        }
+        alignment = alignment_map.get((position, align), 2)
         
-        # 构建字幕滤镜参数
-        # FFmpeg subtitles 滤镜支持 ASS 样式，我们通过 force_style 传递参数
-        font_color_hex = font_color.lstrip('#')
-        outline_color_hex = outline_color.lstrip('#')
-        
-        # 转换颜色格式：#RRGGBB -> &HBBGGRR (ASS 格式)
+        # 转换颜色格式
         def hex_to_ass(hex_color):
+            hex_color = hex_color.lstrip('#')
             r = hex_color[0:2]
             g = hex_color[2:4]
             b = hex_color[4:6]
             return f"&H{b}{g}{r}"
         
-        font_color_ass = hex_to_ass(font_color_hex)
-        outline_color_ass = hex_to_ass(outline_color_hex)
+        font_color_ass = hex_to_ass(font_color)
+        outline_color_ass = hex_to_ass(outline_color)
+        
+        # 垂直边距
+        margin_v_map = {"top": 50, "middle": 540, "bottom": 100}
+        margin_v = margin_v_map.get(position, 100)
+        
+        # 水平边距（根据对齐方式）
+        margin_l = 20 if align == "left" else 0
+        margin_r = 20 if align == "right" else 0
         
         # 构建 force_style 字符串
         style_str = (
@@ -270,8 +279,10 @@ class AdvancedVideoEditor:
             f"OutlineColour={outline_color_ass},"
             f"Outline={outline_width},"
             f"Shadow={shadow},"
-            f"Alignment=2,"  # 底部居中
+            f"Alignment={alignment},"
             f"MarginV={margin_v},"
+            f"MarginL={margin_l},"
+            f"MarginR={margin_r},"
             f"WrapStyle=0,"
             f"BorderStyle=1"
         )
@@ -354,7 +365,12 @@ class AdvancedVideoEditor:
         """
         video_path = Path(video_path)
         note_id = video_path.stem
-        output = self.edited_dir / f"edited_{note_id}.mp4"
+        
+        # 生成新文件名: Dake_Video_Auto_YYYYMMDDhhmm.mp4
+        from datetime import datetime
+        timestamp = datetime.now().strftime("%Y%m%d%H%M")
+        output_filename = f"Dake_Video_Auto_{timestamp}.mp4"
+        output = self.edited_dir / output_filename
         
         info = self.get_info(video_path)
         duration = info["duration"]
@@ -391,10 +407,14 @@ class AdvancedVideoEditor:
         
         # 字幕配置
         add_subtitles = config.get("add_subtitles", False)
-        subtitle_style = config.get("subtitle_style", "white_black")
+        subtitle_text = config.get("subtitle_text", "")
+        subtitle_start = config.get("subtitle_start", 0)
+        subtitle_end = config.get("subtitle_end", None)  # None表示到视频结尾
+        subtitle_style_preset = config.get("subtitle_style", "yellow_black")
+        subtitle_font_size = config.get("subtitle_font_size", 24)
         subtitle_position = config.get("subtitle_position", "bottom")
-        subtitle_font_size = config.get("subtitle_font_size")  # None 表示自动
-        subtitle_custom_size = config.get("subtitle_custom_size")  # 自定义固定大小
+        subtitle_align = config.get("subtitle_align", "center")  # left/center/right
+        subtitle_outline_width = config.get("subtitle_outline_width", 2)
         
         print(f"\n🎬 剪辑: {note_id}")
         print(f"   输入: {w}x{h} | {duration:.1f}s")
@@ -515,45 +535,42 @@ class AdvancedVideoEditor:
         
         if self.run_ffmpeg(cmd):
             # 生成并烧录字幕
-            if add_subtitles:
+            if add_subtitles and subtitle_text:
                 print(f"\n📝 处理字幕...")
                 try:
-                    # 自定义字幕
-                    custom_text = config.get("subtitle_text", "")
-                    start_time = config.get("subtitle_start", 0)
-                    end_time = config.get("subtitle_end", 5)
+                    # 如果未指定结束时间，使用视频时长
+                    if subtitle_end is None:
+                        subtitle_end = new_duration
                     
-                    if custom_text:
-                        # 创建自定义 SRT 文件
-                        srt_path = self.edited_dir / f"edited_{note_id}.srt"
-                        srt_content = f"1\n{self._seconds_to_srt_time(start_time)} --> {self._seconds_to_srt_time(end_time)}\n{custom_text}\n"
-                        srt_path.write_text(srt_content, encoding='utf-8')
-                        print(f"   自定义字幕: '{custom_text}' ({start_time}s - {end_time}s)")
-                        
-                        # 样式配置
-                        style_cfg = {
-                            "style_preset": subtitle_style,
-                            "position": subtitle_position,
-                            "font_size": subtitle_font_size,
-                            "custom_font_size": subtitle_custom_size
-                        }
-                        
-                        # 烧录字幕到新文件
-                        final_output = self.edited_dir / f"edited_{note_id}_sub.mp4"
-                        result = self.burn_subtitles(output, srt_path, final_output, style_cfg)
-                        
-                        if result:
-                            # 删除无字幕版本，重命名有字幕版本
-                            output.unlink()
-                            final_output.rename(output)
-                            print(f"✅ 字幕添加完成")
-                        else:
-                            print(f"⚠️ 字幕烧录失败，使用无字幕版本")
-                        
-                        # 清理 SRT 文件
-                        srt_path.unlink(missing_ok=True)
+                    # 创建自定义 SRT 文件
+                    srt_path = self.edited_dir / f"edited_{note_id}.srt"
+                    srt_content = f"1\n{self._seconds_to_srt_time(subtitle_start)} --> {self._seconds_to_srt_time(subtitle_end)}\n{subtitle_text}\n"
+                    srt_path.write_text(srt_content, encoding='utf-8')
+                    print(f"   字幕内容: '{subtitle_text}' ({subtitle_start}s - {subtitle_end}s)")
+                    
+                    # 样式配置
+                    style_cfg = {
+                        "style_preset": subtitle_style_preset,
+                        "position": subtitle_position,
+                        "align": subtitle_align,
+                        "font_size": subtitle_font_size,
+                        "outline_width": subtitle_outline_width
+                    }
+                    
+                    # 烧录字幕到新文件
+                    final_output = self.edited_dir / f"Dake_Video_Auto_{timestamp}_sub.mp4"
+                    result = self.burn_subtitles(output, srt_path, final_output, style_cfg)
+                    
+                    if result:
+                        # 删除无字幕版本，重命名有字幕版本
+                        output.unlink()
+                        final_output.rename(output)
+                        print(f"✅ 字幕添加完成")
                     else:
-                        print("   ⚠️ 未输入字幕内容，跳过")
+                        print(f"⚠️ 字幕烧录失败，使用无字幕版本")
+                    
+                    # 清理 SRT 文件
+                    srt_path.unlink(missing_ok=True)
                     
                 except Exception as e:
                     print(f"⚠️ 字幕处理失败: {e}")
