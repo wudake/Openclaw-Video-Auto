@@ -11,3 +11,6 @@ werkzeug>=2.0.0
 
 # 浏览器自动化
 playwright>=1.40.0
+
+# 语音识别
+openai-whisper>=20231117

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-下载工作进程 - 独立脚本
+下载工作进程 - 支持单用户和多用户模式
 """
 import asyncio
 import json
@@ -14,18 +14,34 @@ from downloader_pw import XHSPlaywrightDownloader
 def main():
     base_dir = Path(__file__).parent
     
+    # 获取用户ID（单用户模式不传user_id）
+    user_id = sys.argv[1] if len(sys.argv) > 1 else None
+    
+    if user_id:
+        # 多用户模式
+        user_dir = base_dir / "users" / user_id
+        user_dir.mkdir(parents=True, exist_ok=True)
+        raw_dir = user_dir / "videos" / "raw"
+        url_file = user_dir / ".temp_url.txt"
+        result_file = user_dir / ".temp_result.json"
+    else:
+        # 单用户模式（兼容旧版本）
+        raw_dir = base_dir / "videos" / "raw"
+        raw_dir.mkdir(parents=True, exist_ok=True)
+        url_file = base_dir / ".temp_url.txt"
+        result_file = base_dir / ".temp_result.json"
+    
     # 读取 URL
-    url_file = base_dir / ".temp_url.txt"
     if not url_file.exists():
         result = {"status": "error", "error": "未找到 URL 文件"}
-        (base_dir / ".temp_result.json").write_text(json.dumps(result))
+        result_file.write_text(json.dumps(result))
         return
     
     url = url_file.read_text(encoding='utf-8').strip()
     
     # 下载
     async def do_download():
-        dl = XHSPlaywrightDownloader(raw_dir="videos/raw", headless=True)
+        dl = XHSPlaywrightDownloader(raw_dir=str(raw_dir), headless=True)
         return await dl.download(url)
     
     try:
@@ -34,7 +50,7 @@ def main():
         result = {"status": "error", "error": str(e)}
     
     # 保存结果
-    (base_dir / ".temp_result.json").write_text(
+    result_file.write_text(
         json.dumps(result, ensure_ascii=False), 
         encoding='utf-8'
     )

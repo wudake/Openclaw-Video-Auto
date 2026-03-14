@@ -4,12 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dake视频自动化工具</title>
-    <!-- 徽标 - 现代渐变风格DK图标 -->
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%236366f1'/%3E%3Cstop offset='100%25' style='stop-color:%238b5cf6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='22' fill='url(%23g)'/%3E%3Ctext x='50' y='68' font-size='42' text-anchor='middle' fill='white' font-family='-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif' font-weight='800' letter-spacing='-2'%3EDK%3C/text%3E%3C/svg%3E">
-
-    <!-- 苹果设备图标 -->
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%236366f1'/%3E%3Cstop offset='100%25' style='stop-color:%238b5cf6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='180' height='180' rx='40' fill='url(%23g)'/%3E%3Ctext x='90' y='122' font-size='76' text-anchor='middle' fill='white' font-family='-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif' font-weight='800' letter-spacing='-4'%3EDK%3C/text%3E%3C/svg%3E">
-
+    <!-- 徽标 -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='linear-gradient(135deg, #667eea 0%, #764ba2 100%)'/><text x='50' y='65' font-size='45' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>DK</text></svg>">
+    
     <style>
         :root {
             --primary: #6366f1;
@@ -24,13 +21,13 @@
             --success: #10b981;
             --error: #ef4444;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
+        
+        * { 
+            margin: 0; 
+            padding: 0; 
             box-sizing: border-box;
         }
-
+        
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: var(--bg-dark);
@@ -38,7 +35,7 @@
             color: var(--text);
             line-height: 1.6;
         }
-
+        
         /* 动态背景 */
         .bg-animation {
             position: fixed;
@@ -47,26 +44,26 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            background:
+            background: 
                 radial-gradient(ellipse at 20% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
                 radial-gradient(ellipse at 80% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
                 radial-gradient(ellipse at 50% 50%, rgba(6, 182, 212, 0.05) 0%, transparent 70%);
         }
-
-        .container {
-            max-width: 900px;
+        
+        .container { 
+            max-width: 900px; 
             margin: 0 auto;
             padding: 40px 20px;
         }
-
+        
         /* 头部 */
-        .header {
-            text-align: center;
+        .header { 
+            text-align: center; 
             margin-bottom: 40px;
             animation: fadeInDown 0.6s ease;
             position: relative;
         }
-
+        
         .user-bar {
             position: absolute;
             top: 0;
@@ -80,12 +77,12 @@
             border-radius: 12px;
             font-size: 0.9em;
         }
-
+        
         .user-bar .username {
             color: var(--accent);
             font-weight: 600;
         }
-
+        
         .user-bar .btn-logout {
             padding: 6px 12px;
             background: rgba(239, 68, 68, 0.2);
@@ -96,18 +93,18 @@
             font-size: 0.85em;
             transition: all 0.3s ease;
         }
-
+        
         .user-bar .btn-logout:hover {
             background: rgba(239, 68, 68, 0.3);
         }
-
+        
         .logo {
             display: inline-flex;
             align-items: center;
             gap: 15px;
             margin-bottom: 15px;
         }
-
+        
         .logo-icon {
             width: 60px;
             height: 60px;
@@ -121,9 +118,9 @@
             color: white;
             box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
         }
-
-        .header h1 {
-            font-size: 2.8em;
+        
+        .header h1 { 
+            font-size: 2.8em; 
             font-weight: 800;
             background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%);
             -webkit-background-clip: text;
@@ -131,13 +128,13 @@
             background-clip: text;
             letter-spacing: -1px;
         }
-
-        .header p {
+        
+        .header p { 
             color: var(--text-muted);
             font-size: 1.1em;
             margin-top: 10px;
         }
-
+        
         /* 卡片 */
         .card {
             background: var(--bg-card);
@@ -150,12 +147,12 @@
             animation: fadeInUp 0.6s ease;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-
+        
         .card:hover {
             transform: translateY(-2px);
             box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6);
         }
-
+        
         .card-title {
             font-size: 1.4em;
             font-weight: 700;
@@ -165,7 +162,7 @@
             align-items: center;
             gap: 12px;
         }
-
+        
         .step-number {
             width: 36px;
             height: 36px;
@@ -178,21 +175,21 @@
             font-size: 0.9em;
             box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
         }
-
+        
         /* 输入框 */
-        .input-group {
-            margin-bottom: 24px;
+        .input-group { 
+            margin-bottom: 24px; 
         }
-
-        label {
-            display: block;
-            margin-bottom: 10px;
+        
+        label { 
+            display: block; 
+            margin-bottom: 10px; 
             color: var(--text-muted);
             font-weight: 500;
             font-size: 0.95em;
         }
-
-        input[type="text"],
+        
+        input[type="text"], 
         input[type="password"],
         select,
         textarea {
@@ -205,17 +202,17 @@
             color: var(--text);
             transition: all 0.3s ease;
         }
-
+        
         input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
         }
-
+        
         input::placeholder {
             color: var(--text-muted);
         }
-
+        
         /* 按钮 */
         .btn {
             padding: 14px 28px;
@@ -229,44 +226,44 @@
             align-items: center;
             gap: 10px;
         }
-
+        
         .btn-primary {
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
             box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
         }
-
-        .btn-primary:hover {
+        
+        .btn-primary:hover { 
             transform: translateY(-2px);
             box-shadow: 0 15px 40px rgba(99, 102, 241, 0.5);
         }
-
+        
         .btn-secondary {
             background: rgba(148, 163, 184, 0.1);
             color: var(--text);
             border: 1px solid var(--border);
         }
-
+        
         .btn-secondary:hover {
             background: rgba(148, 163, 184, 0.2);
         }
-
+        
         .btn-sm {
             padding: 8px 16px;
             font-size: 14px;
         }
-
+        
         .btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             transform: none !important;
         }
-
+        
         /* 任务队列卡片 */
         .task-queue-card {
             border-left: 4px solid var(--primary);
         }
-
+        
         .queue-badge {
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
@@ -275,14 +272,14 @@
             border-radius: 10px;
             margin-left: 8px;
         }
-
+        
         .queue-status {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
             margin-bottom: 20px;
         }
-
+        
         .queue-item {
             text-align: center;
             padding: 15px;
@@ -290,23 +287,23 @@
             border-radius: 12px;
             border: 1px solid var(--border);
         }
-
+        
         .queue-label {
             display: block;
             color: var(--text-muted);
             font-size: 12px;
             margin-bottom: 5px;
         }
-
+        
         .queue-value {
             font-size: 24px;
             font-weight: 700;
         }
-
+        
         .queue-value.pending { color: #f59e0b; }
         .queue-value.running { color: #3b82f6; }
         .queue-value.completed { color: var(--success); }
-
+        
         .current-task {
             background: rgba(15, 23, 42, 0.6);
             border: 1px solid var(--border);
@@ -314,23 +311,23 @@
             padding: 15px;
             margin-bottom: 15px;
         }
-
+        
         .task-info {
             display: flex;
             justify-content: space-between;
             margin-bottom: 10px;
         }
-
+        
         .task-type {
             color: var(--text);
             font-weight: 600;
         }
-
+        
         .task-status {
             color: var(--accent);
             font-size: 14px;
         }
-
+        
         .progress-bar {
             height: 8px;
             background: rgba(148, 163, 184, 0.2);
@@ -338,25 +335,25 @@
             overflow: hidden;
             margin-bottom: 8px;
         }
-
+        
         .progress-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
             border-radius: 4px;
             transition: width 0.3s ease;
         }
-
+        
         .progress-text {
             text-align: center;
             font-size: 14px;
             color: var(--text-muted);
         }
-
+        
         .task-list {
             max-height: 200px;
             overflow-y: auto;
         }
-
+        
         .task-item {
             display: flex;
             align-items: center;
@@ -367,41 +364,41 @@
             margin-bottom: 8px;
             font-size: 14px;
         }
-
+        
         .task-item:last-child {
             margin-bottom: 0;
         }
-
+        
         .task-item-type {
             color: var(--text);
         }
-
+        
         .task-item-status {
             padding: 2px 8px;
             border-radius: 4px;
             font-size: 12px;
         }
-
+        
         .task-item-status.pending {
             background: rgba(245, 158, 11, 0.2);
             color: #f59e0b;
         }
-
+        
         .task-item-status.running {
             background: rgba(59, 130, 246, 0.2);
             color: #3b82f6;
         }
-
+        
         .task-item-status.success {
             background: rgba(16, 185, 129, 0.2);
             color: var(--success);
         }
-
+        
         .task-item-status.failed {
             background: rgba(239, 68, 68, 0.2);
             color: var(--error);
         }
-
+        
         /* 加载动画 */
         .spinner {
             width: 20px;
@@ -411,11 +408,11 @@
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
-
+        
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-
+        
         /* 状态提示 */
         .status {
             padding: 16px 20px;
@@ -425,21 +422,21 @@
             font-weight: 500;
             animation: fadeIn 0.3s ease;
         }
-
+        
         .status.success {
             background: rgba(16, 185, 129, 0.1);
             color: var(--success);
             border: 1px solid rgba(16, 185, 129, 0.3);
         }
-
+        
         .status.error {
             background: rgba(239, 68, 68, 0.1);
             color: var(--error);
             border: 1px solid rgba(239, 68, 68, 0.3);
         }
-
+        
         .status.show { display: block; }
-
+        
         /* 选项网格 */
         .options-grid {
             display: grid;
@@ -447,7 +444,7 @@
             gap: 12px;
             margin-bottom: 24px;
         }
-
+        
         .option-item {
             display: flex;
             align-items: center;
@@ -459,29 +456,29 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-
+        
         .option-item:hover {
             background: rgba(99, 102, 241, 0.1);
             border-color: var(--primary);
         }
-
+        
         .option-item input[type="checkbox"] {
             width: 20px;
             height: 20px;
             accent-color: var(--primary);
         }
-
+        
         /* 滑块 */
         .range-group {
             margin-bottom: 24px;
         }
-
+        
         .range-group label {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-
+        
         .range-value {
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
@@ -490,7 +487,7 @@
             font-size: 14px;
             font-weight: 600;
         }
-
+        
         input[type="range"] {
             width: 100%;
             margin-top: 12px;
@@ -500,7 +497,7 @@
             outline: none;
             -webkit-appearance: none;
         }
-
+        
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             width: 20px;
@@ -510,7 +507,7 @@
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
         }
-
+        
         /* 上传区域 */
         .upload-area {
             border: 2px dashed var(--border);
@@ -521,12 +518,12 @@
             transition: all 0.3s ease;
             background: rgba(15, 23, 42, 0.3);
         }
-
+        
         .upload-area:hover {
             border-color: var(--primary);
             background: rgba(99, 102, 241, 0.1);
         }
-
+        
         /* 视频预览 */
         .preview-video {
             width: 100%;
@@ -535,7 +532,7 @@
             margin: 20px 0;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
-
+        
         /* 按钮组 */
         .action-buttons {
             display: flex;
@@ -543,9 +540,9 @@
             margin-top: 24px;
             flex-wrap: wrap;
         }
-
+        
         .hidden { display: none !important; }
-
+        
         /* 分区标题 */
         .section-title {
             font-weight: 700;
@@ -555,7 +552,7 @@
             border-bottom: 1px solid var(--border);
             font-size: 1.1em;
         }
-
+        
         /* 选择框 */
         .select-box {
             width: 100%;
@@ -566,30 +563,30 @@
             font-size: 16px;
             color: var(--text);
         }
-
+        
         /* 动画 */
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
-
+        
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
+        
         @keyframes fadeInDown {
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
+        
         .fade-in {
             animation: fadeInUp 0.6s ease;
         }
-
+        
         /* 文件列表 */
         .file-list { margin-top: 16px; }
-
+        
         .file-item {
             display: flex;
             align-items: center;
@@ -601,7 +598,7 @@
             margin-bottom: 10px;
             font-size: 0.95em;
         }
-
+        
         /* 响应式 */
         @media (max-width: 600px) {
             .container { padding: 20px 16px; }
@@ -613,15 +610,58 @@
 </head>
 <body>
     <div class="bg-animation"></div>
-
+    
     <div class="container">
         <!-- 头部 -->
         <div class="header">
+            <div class="user-bar" id="userBar">
+                <span class="username" id="userName">加载中...</span>
+                <button class="btn-logout" onclick="logout()">退出</button>
+            </div>
             <div class="logo">
                 <div class="logo-icon">DK</div>
             </div>
             <h1>Dake视频自动化工具</h1>
             <p>小红书视频下载 · 智能剪辑 · 一键导出</p>
+        </div>
+
+        <!-- 任务队列状态 -->
+        <div class="card task-queue-card" id="taskQueueCard">
+            <div class="card-title">
+                <span class="step-number">📋</span>
+                任务队列
+                <span class="queue-badge" id="queueBadge">0</span>
+            </div>
+            <div class="queue-status" id="queueStatus">
+                <div class="queue-item">
+                    <span class="queue-label">等待中</span>
+                    <span class="queue-value pending" id="pendingCount">0</span>
+                </div>
+                <div class="queue-item">
+                    <span class="queue-label">执行中</span>
+                    <span class="queue-value running" id="runningCount">0</span>
+                </div>
+                <div class="queue-item">
+                    <span class="queue-label">已完成</span>
+                    <span class="queue-value completed" id="completedCount">0</span>
+                </div>
+            </div>
+            <div class="current-task" id="currentTask" style="display:none">
+                <div class="task-info">
+                    <span class="task-type" id="currentTaskType">-</span>
+                    <span class="task-status" id="currentTaskStatus">-</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width:0%"></div>
+                </div>
+                <div class="progress-text" id="progressText">0%</div>
+            </div>
+            <div class="task-list" id="taskList">
+                <!-- 任务列表动态生成 -->
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="refreshQueueStatus()" style="margin-top:10px">
+                🔄 刷新状态
+            </button>
         </div>
 
         <!-- 步骤 1: 下载 -->
@@ -634,7 +674,7 @@
                 <label>小红书视频链接</label>
                 <input type="text" id="xhs-url" placeholder="https://www.xiaohongshu.com/explore/...">
             </div>
-
+            
             <button class="btn btn-primary" id="btn-download" onclick="downloadVideo()">
                 <span>开始下载</span>
             </button>
@@ -647,7 +687,7 @@
                 <span class="step-number">2</span>
                 剪辑配置
             </div>
-
+            
             <!-- Logo -->
             <div class="section-title">📁 Logo 设置</div>
             <div class="input-group">
@@ -656,14 +696,14 @@
                     <input type="file" id="logo-file" accept=".png" style="display:none" onchange="uploadLogo(this)">
                 </div>
             </div>
-
+            
             <div class="input-group">
                 <label>选择 Logo</label>
                 <select id="logo-select" class="select-box">
                     <option value="">-- 请选择 --</option>
                 </select>
             </div>
-
+            
             <!-- BGM -->
             <div class="section-title">🎵 BGM 设置</div>
             <div class="input-group">
@@ -672,7 +712,7 @@
                     <input type="file" id="bgm-file" accept=".mp3,.m4a" style="display:none" onchange="uploadBgm(this)">
                 </div>
             </div>
-
+            
             <div class="input-group">
                 <label>选择 BGM</label>
                 <select id="bgm-select" class="select-box">
@@ -682,14 +722,14 @@
 
             <!-- 音频设置 -->
             <div class="section-title">🔊 音频设置</div>
-
+            
             <div class="options-grid">
                 <label class="option-item">
                     <input type="checkbox" id="opt-replace-audio">
                     <span>使用 BGM 替换原声</span>
                 </label>
             </div>
-
+            
             <div class="range-group">
                 <label>
                     原声音量
@@ -698,7 +738,7 @@
                 <input type="range" id="original-volume" min="0" max="2" step="0.1" value="1"
                        oninput="document.getElementById('orig-vol-value').textContent=Math.round(this.value*100)+'%'">
             </div>
-
+            
             <div class="range-group">
                 <label>
                     BGM 音量
@@ -718,7 +758,7 @@
                 </label>
                 <label class="option-item">
                     <input type="checkbox" id="opt-crop" checked>
-                    <span>裁剪首尾</span>
+                    <span>裁剪首尾 0.5s</span>
                 </label>
                 <label class="option-item">
                     <input type="checkbox" id="opt-color" checked>
@@ -729,27 +769,13 @@
                     <span>智能缩放</span>
                 </label>
             </div>
-            
-            <!-- 裁剪时间设置 -->
-            <div class="input-group" id="crop-time-settings" style="margin-top: 15px; padding: 15px; background: rgba(15, 23, 42, 0.5); border-radius: 10px;">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <div>
-                        <label style="font-size: 13px; color: var(--text-muted);">去除头部 (秒)</label>
-                        <input type="number" id="crop-head-time" class="select-box" value="0.5" min="0" max="10" step="0.1" style="width: 100%; margin-top: 5px; padding: 10px;">
-                    </div>
-                    <div>
-                        <label style="font-size: 13px; color: var(--text-muted);">去除尾部 (秒)</label>
-                        <input type="number" id="crop-tail-time" class="select-box" value="0.5" min="0" max="10" step="0.1" style="width: 100%; margin-top: 5px; padding: 10px;">
-                    </div>
-                </div>
-            </div>
 
             <div class="range-group">
                 <label>
                     播放速度
                     <span class="range-value" id="speed-value">1.05x</span>
                 </label>
-                <input type="range" id="speed" min="0.8" max="2.0" step="0.05" value="1.05"
+                <input type="range" id="speed" min="0.8" max="2.0" step="0.05" value="1.05" 
                        oninput="document.getElementById('speed-value').textContent=this.value+'x'">
             </div>
 
@@ -765,10 +791,10 @@
             <div class="input-group">
                 <label>Logo 位置</label>
                 <select id="logo-position" class="select-box">
-                    <option value="top_left" selected>左上角</option>
-                    <option value="top_right">右上角</option>
-                    <option value="bottom_left">左下角</option>
                     <option value="bottom_right">右下角</option>
+                    <option value="bottom_left">左下角</option>
+                    <option value="top_right">右上角</option>
+                    <option value="top_left">左上角</option>
                     <option value="bottom_center">底部居中</option>
                 </select>
             </div>
@@ -799,6 +825,32 @@
         let logosData = [];
         let bgmsData = [];
 
+        // 加载用户信息
+        async function loadUserInfo() {
+            try {
+                const res = await fetch('/api/user/info');
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('userName').textContent = data.user_name;
+                }
+            } catch (e) {
+                console.error('加载用户信息失败:', e);
+            }
+        }
+
+        // 登出
+        async function logout() {
+            try {
+                await fetch('/api/logout', { method: 'POST' });
+                window.location.href = '/login';
+            } catch (e) {
+                console.error('登出失败:', e);
+            }
+        }
+
+        // 页面加载时获取用户信息
+        loadUserInfo();
+
         function showStatus(id, msg, isError) {
             const el = document.getElementById(id);
             el.textContent = msg;
@@ -821,14 +873,17 @@
                 const res = await fetch('/api/logos/list');
                 const data = await res.json();
                 logosData = data.logos || [];
+                
                 const select = document.getElementById('logo-select');
                 select.innerHTML = '<option value="">-- 请选择 --</option>';
+                
                 logosData.forEach(logo => {
                     const opt = document.createElement('option');
                     opt.value = logo.name;
                     opt.textContent = logo.name + ' (' + logo.size_kb + 'KB)';
                     select.appendChild(opt);
                 });
+                
                 if (logosData.length > 0) select.value = logosData[0].name;
             } catch (e) {
                 console.error('加载 Logo 失败:', e);
@@ -840,14 +895,18 @@
                 const res = await fetch('/api/bgm/list');
                 const data = await res.json();
                 bgmsData = data.bgms || [];
+                
                 const select = document.getElementById('bgm-select');
                 select.innerHTML = '<option value="">-- 请选择 --</option>';
+                
                 bgmsData.forEach(bgm => {
                     const opt = document.createElement('option');
                     opt.value = bgm.name;
                     opt.textContent = bgm.name + ' (' + bgm.size_mb + 'MB)';
                     select.appendChild(opt);
                 });
+                
+                if (bgmsData.length > 0) select.value = bgmsData[0].name;
             } catch (e) {
                 console.error('加载 BGM 失败:', e);
             }
@@ -872,8 +931,10 @@
                 if (result.success) {
                     currentNoteId = result.data.note_id;
                     showStatus('download-status', `✅ 下载成功！${result.data.size_mb}MB`);
+                    
                     await loadLogos();
                     await loadBgms();
+                    
                     document.getElementById('step2').classList.remove('hidden');
                     document.getElementById('step2').classList.add('fade-in');
                     document.getElementById('step2').scrollIntoView({ behavior: 'smooth' });
@@ -891,6 +952,7 @@
             if (!input.files.length) return;
             const formData = new FormData();
             formData.append('file', input.files[0]);
+
             try {
                 const res = await fetch('/api/upload/logo', { method: 'POST', body: formData });
                 const result = await res.json();
@@ -909,6 +971,7 @@
             if (!input.files.length) return;
             const formData = new FormData();
             formData.append('file', input.files[0]);
+
             try {
                 const res = await fetch('/api/upload/bgm', { method: 'POST', body: formData });
                 const result = await res.json();
@@ -923,21 +986,6 @@
             }
         }
 
-        // 字幕功能控制
-        document.getElementById('opt-subtitles').addEventListener('change', function() {
-            const customGroup = document.getElementById('custom-subtitle-group');
-            customGroup.style.display = this.checked ? 'block' : 'none';
-        });
-
-        // 字体大小实时预览
-        document.getElementById('subtitle-custom-size').addEventListener('input', function() {
-            const size = this.value || 16;
-            const preview = document.getElementById('font-preview');
-            const display = document.getElementById('font-size-display');
-            preview.style.fontSize = size + 'px';
-            display.textContent = size + 'px';
-        });
-
         async function editVideo() {
             if (!currentNoteId) {
                 showStatus('edit-status', '请先下载视频', true);
@@ -948,16 +996,11 @@
             const bgmSelect = document.getElementById('bgm-select').value;
             const replaceAudio = document.getElementById('opt-replace-audio').checked;
 
-            // 获取裁剪时间
-            const isCropEnabled = document.getElementById('opt-crop').checked;
-            const cropHeadTime = isCropEnabled ? parseFloat(document.getElementById('crop-head-time').value) || 0 : 0;
-            const cropTailTime = isCropEnabled ? parseFloat(document.getElementById('crop-tail-time').value) || 0 : 0;
-
             setLoading('btn-edit', true);
 
             const config = {
-                crop_top: cropHeadTime,
-                crop_bottom: cropTailTime,
+                crop_top: document.getElementById('opt-crop').checked ? 0.5 : 0,
+                crop_bottom: document.getElementById('opt-crop').checked ? 0.5 : 0,
                 speed: parseFloat(document.getElementById('speed').value),
                 hflip: document.getElementById('opt-hflip').checked,
                 zoom: document.getElementById('opt-zoom').checked ? 1.05 : 1.0,
@@ -999,6 +1042,272 @@
                 setLoading('btn-edit', false);
             }
         }
+
+        // ========== 任务队列功能 ==========
+        let currentTaskId = null;
+        let queuePollInterval = null;
+
+        // 刷新队列状态
+        async function refreshQueueStatus() {
+            try {
+                // 获取队列整体状态
+                const queueRes = await fetch('/api/queue/status');
+                const queueData = await queueRes.json();
+                
+                if (queueData.success) {
+                    const status = queueData.status;
+                    document.getElementById('pendingCount').textContent = status.pending;
+                    document.getElementById('runningCount').textContent = status.running;
+                    document.getElementById('completedCount').textContent = status.completed;
+                    document.getElementById('queueBadge').textContent = status.pending + status.running;
+                    
+                    // 显示当前任务
+                    if (status.current_task) {
+                        const currentTask = document.getElementById('currentTask');
+                        currentTask.style.display = 'block';
+                        
+                        const typeMap = {
+                            'download': '下载视频',
+                            'edit': '剪辑视频',
+                            'publish': '发布视频'
+                        };
+                        
+                        document.getElementById('currentTaskType').textContent = typeMap[status.current_task.task_type] || status.current_task.task_type;
+                        document.getElementById('currentTaskStatus').textContent = status.current_task.status === 'running' ? '执行中...' : status.current_task.status;
+                        document.getElementById('progressFill').style.width = status.current_task.progress + '%';
+                        document.getElementById('progressText').textContent = status.current_task.progress + '%';
+                    } else {
+                        document.getElementById('currentTask').style.display = 'none';
+                    }
+                }
+                
+                // 获取用户任务列表
+                const tasksRes = await fetch('/api/tasks/my?limit=10');
+                const tasksData = await tasksRes.json();
+                
+                if (tasksData.success) {
+                    renderTaskList(tasksData.tasks);
+                }
+                
+            } catch (e) {
+                console.error('刷新队列状态失败:', e);
+            }
+        }
+
+        // 渲染任务列表
+        function renderTaskList(tasks) {
+            const listEl = document.getElementById('taskList');
+            
+            if (!tasks || tasks.length === 0) {
+                listEl.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:20px">暂无任务</div>';
+                return;
+            }
+            
+            const typeMap = {
+                'download': '下载',
+                'edit': '剪辑',
+                'publish': '发布'
+            };
+            
+            const statusMap = {
+                'pending': { text: '等待中', class: 'pending' },
+                'running': { text: '执行中', class: 'running' },
+                'success': { text: '成功', class: 'success' },
+                'failed': { text: '失败', class: 'failed' },
+                'cancelled': { text: '已取消', class: 'failed' }
+            };
+            
+            listEl.innerHTML = tasks.map(task => {
+                const type = typeMap[task.task_type] || task.task_type;
+                const status = statusMap[task.status] || { text: task.status, class: '' };
+                const time = new Date(task.created_at).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+                
+                return `
+                    <div class="task-item">
+                        <div>
+                            <span class="task-item-type">${type}</span>
+                            <span style="color:var(--text-muted);font-size:12px;margin-left:8px">${time}</span>
+                        </div>
+                        <span class="task-item-status ${status.class}">${status.text}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 轮询任务状态
+        function startQueuePolling() {
+            refreshQueueStatus(); // 立即执行一次
+            queuePollInterval = setInterval(refreshQueueStatus, 2000); // 每2秒刷新
+        }
+
+        function stopQueuePolling() {
+            if (queuePollInterval) {
+                clearInterval(queuePollInterval);
+                queuePollInterval = null;
+            }
+        }
+
+        // 修改下载函数，支持队列
+        async function downloadVideo() {
+            const url = document.getElementById('xhs-url').value.trim();
+            if (!url) {
+                showStatus('download-status', '请输入链接', true);
+                return;
+            }
+
+            setLoading('btn-download', true);
+            try {
+                const res = await fetch('/api/download', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+                const result = await res.json();
+
+                if (result.success) {
+                    currentTaskId = result.task_id;
+                    showStatus('download-status', `✅ ${result.message}\n任务ID: ${result.task_id}`);
+                    
+                    // 开始轮询任务状态
+                    startQueuePolling();
+                    
+                    // 等待任务完成
+                    await waitForTaskComplete(result.task_id);
+                    
+                    // 任务完成后加载下一步
+                    await loadLogos();
+                    await loadBgms();
+                    document.getElementById('step2').classList.remove('hidden');
+                    document.getElementById('step2').classList.add('fade-in');
+                    document.getElementById('step2').scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    showStatus('download-status', '❌ ' + result.error, true);
+                }
+            } catch (e) {
+                showStatus('download-status', '❌ 网络错误', true);
+            } finally {
+                setLoading('btn-download', false);
+            }
+        }
+
+        // 等待任务完成
+        async function waitForTaskComplete(taskId) {
+            return new Promise((resolve, reject) => {
+                const checkInterval = setInterval(async () => {
+                    try {
+                        const res = await fetch(`/api/tasks/${taskId}`);
+                        const data = await res.json();
+                        
+                        if (data.success) {
+                            const task = data.task;
+                            
+                            if (task.status === 'success') {
+                                clearInterval(checkInterval);
+                                if (task.result && task.result.note_id) {
+                                    currentNoteId = task.result.note_id;
+                                }
+                                resolve(task);
+                            } else if (task.status === 'failed') {
+                                clearInterval(checkInterval);
+                                reject(new Error(task.error || '任务失败'));
+                            } else if (task.status === 'cancelled') {
+                                clearInterval(checkInterval);
+                                reject(new Error('任务已取消'));
+                            }
+                            // 其他状态继续等待
+                        }
+                    } catch (e) {
+                        console.error('查询任务状态失败:', e);
+                    }
+                }, 1000);
+                
+                // 超时处理 (5分钟)
+                setTimeout(() => {
+                    clearInterval(checkInterval);
+                    reject(new Error('任务超时'));
+                }, 300000);
+            });
+        }
+
+        // 修改剪辑函数，支持队列
+        async function editVideo() {
+            if (!currentNoteId) {
+                showStatus('edit-status', '请先下载视频', true);
+                return;
+            }
+
+            const logoSelect = document.getElementById('logo-select').value;
+            const bgmSelect = document.getElementById('bgm-select').value;
+            const replaceAudio = document.getElementById('opt-replace-audio').checked;
+
+            setLoading('btn-edit', true);
+
+            const config = {
+                crop_top: document.getElementById('opt-crop').checked ? 0.5 : 0,
+                crop_bottom: document.getElementById('opt-crop').checked ? 0.5 : 0,
+                speed: parseFloat(document.getElementById('speed').value),
+                hflip: document.getElementById('opt-hflip').checked,
+                zoom: document.getElementById('opt-zoom').checked ? 1.05 : 1.0,
+                brightness: document.getElementById('opt-color').checked ? 0.05 : 0,
+                contrast: document.getElementById('opt-color').checked ? 0.1 : 0,
+                saturation: document.getElementById('opt-color').checked ? 0.05 : 0,
+                add_logo: !!logoSelect,
+                logo_select: logoSelect,
+                logo_position: document.getElementById('logo-position').value,
+                logo_size: parseFloat(document.getElementById('logo-size').value),
+                replace_audio: replaceAudio,
+                bgm_select: bgmSelect,
+                bgm_volume: parseFloat(document.getElementById('bgm-volume').value),
+                original_volume: parseFloat(document.getElementById('original-volume').value)
+            };
+
+            try {
+                const res = await fetch('/api/edit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ note_id: currentNoteId, config })
+                });
+                const result = await res.json();
+
+                if (result.success) {
+                    currentTaskId = result.task_id;
+                    showStatus('edit-status', `✅ ${result.message}\n任务ID: ${result.task_id}`);
+                    
+                    // 开始轮询
+                    startQueuePolling();
+                    
+                    // 等待任务完成
+                    const taskResult = await waitForTaskComplete(result.task_id);
+                    
+                    if (taskResult.result && taskResult.result.output_name) {
+                        showStatus('edit-status', '✅ 剪辑完成！');
+                        document.getElementById('step3').classList.remove('hidden');
+                        document.getElementById('step3').classList.add('fade-in');
+                        document.getElementById('preview-player').src = `/api/preview/${taskResult.result.output_name}`;
+                        document.getElementById('download-link').href = `/api/download/edited/${taskResult.result.output_name}`;
+                        window.currentVideoName = taskResult.result.output_name;
+                        document.getElementById('step3').scrollIntoView({ behavior: 'smooth' });
+                    }
+                } else {
+                    showStatus('edit-status', '❌ ' + result.error, true);
+                }
+            } catch (e) {
+                showStatus('edit-status', '❌ ' + (e.message || '网络错误'), true);
+            } finally {
+                setLoading('btn-edit', false);
+            }
+        }
+
+        // 页面加载时开始轮询
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUserInfo();
+            startQueuePolling();
+        });
+
+        // 页面卸载时停止轮询
+        window.addEventListener('beforeunload', () => {
+            stopQueuePolling();
+        });
     </script>
 </body>
 </html>
